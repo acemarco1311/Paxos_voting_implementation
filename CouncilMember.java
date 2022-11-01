@@ -1347,5 +1347,98 @@ public class CouncilMember implements Runnable{
                  memberList.get(i).shutDownServer(); 
             }
         }
+        // test case 14: 1 Proposer proposes to 19 other members
+        // 10 acceptors crash immediately
+        // After 10 seconds, the 10 acceptors come online
+        if(args[0].equals("testing") && args[1].equals("14")){
+            ArrayList<String> serverSocketInfo = new ArrayList<String>(); 
+            ArrayList<CouncilMember> memberList = new ArrayList<CouncilMember>(); 
+            for(int i = 1; i <= 20; i++){
+                String hostname = "localhost"; 
+                String port = Integer.toString(STARTING_PORT + i); 
+                String socketInfo = hostname + ":" + port; 
+                serverSocketInfo.add(socketInfo); 
+            }
+            CouncilMember memberOne = new CouncilMember("Medium", serverSocketInfo); 
+            CouncilMember memberTwo = new CouncilMember("Medium", serverSocketInfo); 
+            CouncilMember memberThree = new CouncilMember("Immediate", serverSocketInfo); 
+            CouncilMember memberFour = new CouncilMember("Never", serverSocketInfo); 
+            CouncilMember memberFive = new CouncilMember("Immediate", serverSocketInfo); 
+            CouncilMember memberSix = new CouncilMember("Medium", serverSocketInfo); 
+            CouncilMember memberSeven = new CouncilMember("Medium", serverSocketInfo); 
+            CouncilMember memberEight = new CouncilMember("Immediate", serverSocketInfo); 
+            CouncilMember memberNine = new CouncilMember("Immediate", serverSocketInfo); 
+            CouncilMember memberTen = new CouncilMember("Immediate", serverSocketInfo); 
+            CouncilMember memberEleven = new CouncilMember("Medium", serverSocketInfo); 
+            CouncilMember memberTwelve = new CouncilMember("Late", serverSocketInfo); 
+            CouncilMember memberThirteen = new CouncilMember("Immediate", serverSocketInfo); 
+            CouncilMember memberFourteen = new CouncilMember("Medium", serverSocketInfo); 
+            CouncilMember memberFifteen = new CouncilMember("Medium", serverSocketInfo); 
+            CouncilMember memberSixteen = new CouncilMember("Immediate", serverSocketInfo); 
+            CouncilMember memberSeventeen = new CouncilMember("Medium", serverSocketInfo); 
+            CouncilMember memberEighteen = new CouncilMember("Late", serverSocketInfo); 
+            CouncilMember memberNineteen = new CouncilMember("Immediate", serverSocketInfo); 
+            CouncilMember memberTwenty = new CouncilMember("Late", serverSocketInfo); 
+            memberList.add(memberOne); 
+            memberList.add(memberTwo); 
+            memberList.add(memberThree); 
+            memberList.add(memberFour); 
+            memberList.add(memberFive); 
+            memberList.add(memberSix); 
+            memberList.add(memberSeven); 
+            memberList.add(memberEight); 
+            memberList.add(memberNine); 
+            memberList.add(memberTen); 
+            memberList.add(memberEleven); 
+            memberList.add(memberTwelve); 
+            memberList.add(memberThirteen); 
+            memberList.add(memberFourteen); 
+            memberList.add(memberFifteen); 
+            memberList.add(memberSixteen); 
+            memberList.add(memberSeventeen); 
+            memberList.add(memberEighteen); 
+            memberList.add(memberNineteen); 
+            memberList.add(memberTwenty); 
+
+            // The proposal
+            memberFive.setChosenValue("1999"); 
+            Thread memberFivePropose = new Thread(memberFive); 
+            memberFivePropose.start(); 
+
+            for(int i = 9; i < memberList.size(); i++){
+                memberList.get(i).shutDownServer(); 
+            }
+            System.out.println("Crash 10 members immediately."); 
+            // go back online after 10 seconds
+            try{
+                Thread.sleep(10000); 
+            }
+            catch(Exception e){
+
+            }
+            for(int i = 9; i < memberList.size(); i++){
+                memberList.get(i).reRunMemberServer(); 
+            }
+            System.out.println("All the members that crashed go back online."); 
+            try{
+                memberFivePropose.join(); 
+            }
+            catch(Exception e){
+
+            }
+            // writeOutputToTestFile(memberList, "Testing/TestCase14Output.txt"); 
+            // wait for 2 seconds to make sure all the printing information has been completed 
+            try{
+                Thread.sleep(2000); 
+            }
+            catch(Exception e){
+
+            }
+            // shut down all the server of members from this test case
+            // so that the next test case can be run
+            for(int i = 0; i < memberList.size(); i++){
+                 memberList.get(i).shutDownServer(); 
+            }
+        }
     }
 }
